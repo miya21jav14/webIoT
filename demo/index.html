@@ -9,55 +9,43 @@
         margin: 50;
         font-family: Pacifico;
     }
-
     h3{
         width: auto;
         text-align: center;
     }
-
     table{
         width: 100%;
         text-align: center;
     }
-
     img.main{
         width: 50%;
     }
-
     .d1{
         font-size: small;
         
     }
-
     .value{
         text-align: right;
     }
-
     .wxIcon{
         font-size: xxx-large;
     }
-
     .water_img{
         width:80%;
     }
-
     .gate_img{
         width:40%;
     }
-
     .revel_red{
         border:dashed 5px red;
     }
-
     .revel_yellow{
         border:dashed 5px yellow;
     }
-
     .time_stamp{
         width: 100%;
         text-align: right;
     }
-
 </style>
 </head>
 <script type="module" src="https://chirimen.org/remote-connection/js/beta/RelayServerGlobal.js"></script>
@@ -66,8 +54,8 @@
 <h3 width="100%" text-align="center" id="deviceTitle">○○さんの田んぼ 東１</h3>
 
 <input type="button" onclick="getData()" value="GET SENSOR DATA"></input>
-<input type="button" onclick="getWeatherData()" value="GET WEATHER DATA"></input>
-<div class="time_stamp">2022年11月16日 16時30分 現在</div>
+<input type="button" onclick="getMessage()" value="GET MESSAGE"></input>
+<div id="timeStamp" class="time_stamp">2022年11月16日 16時30分 現在</div>
 <table>
     <tr width="80%"><th><img class="main" src="tachiaraiDSC02706_TP_V.jpg"</img></th></tr>
     <tr><th>
@@ -75,24 +63,21 @@
             <tr>
                 <td rowspan="5">
                     <div id="waterImgDiv"><img class="water_img" src="water_level_00.jpg"></img></div><br/>
-                    <div class="d1">現在の水位：<span id="waterLevel">8.4</span>cm</div>
+                    <div class="d1">現在の水位：<span id="waterLevel">0.5</span>cm</div>
                 </td>
                 <td rowspan="5">
-                    <div id="gateImgDiv"><img class="gate_img" src="gate_open_01.png"></img></div>
+                    <div id="gateImgDiv"><img class="gate_img" src="gate_open_00.png"></img></div>
                     <br/>
-                    <div class="d1">水門の開き具合：<span id="gateOpen">0.5</span>m</div>
+                    <div class="d1">水門の開き具合：<span id="gateOpen">0.0</span>m</div>
                 </td>
-                <th>温度</th><td class="value" id="temTd">19.9℃</td>
+                <th>温度</th><td id="temTd" class="value">19.9℃</td>
             </tr>
-            <tr><th>湿度</th><td id="temTd" class="value">84%</td></tr>
+            <tr><th>湿度</th><td id="humTd" class="value">84%</td></tr>
             <tr><th>3時間後の<br/>予想天気</th><td id="exWxTd" class="value"></td></tr>
             <tr><th>3時間後の<br/>予想気温</th><td id="exTemTd" class="value">0%</td></tr>
             <tr><th>3時間後の<br/>予想降水量</th><td id="exRainTd" class="value">0㎜</td></tr>
         </table>
     </th></tr>
 </table>
-    
-</table>
-<div id="messageDiv"></div>
 </body>
 </html>

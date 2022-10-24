@@ -3,25 +3,52 @@ onload = async function(){
 	// webSocketリレーの初期化
 	var relay = RelayServer("chirimentest", "chirimenSocket" );
 	channel = await relay.subscribe("chirimenSHT");
-	messageDiv.innerText=" web socketリレーサービスに接続しました";
 	channel.onmessage = getMessage;
 
-	getWeatherData();
+	//getWeatherData();
 }
 
 function getMessage(msg){ // メッセージを受信したときに起動する関数
-	var mdata = msg.data;
-	messageDiv.innerText = JSON.stringify(mdata);
+	//var mdata = msg.data;
+	
+	//
+	var mdata = new Object();
+	mdata.temperature = "24.5";
+	mdata.humidity = "65.8";
+	mdata.waterlevel = "8.0";
+	mdata.gateopen = "0.4";
+	//
+
+
 	console.log("mdata:",mdata);
+	
 	temTd.innerText = mdata.temperature + "℃";
 	humTd.innerText = mdata.humidity + "％";
+	timeStamp.innerText = getStrNowDate();
 
 	setWaterLevel(mdata.waterlevel);
 	setGateOpen(mdata.gateopen);
+	getWeatherData();
 }
 
 function getData(){ // get microbit's internal sensor data
 	channel.send("GET SENSOR DATA");
+}
+
+function getStrNowDate(){
+	var nDate = new Date();
+	//「年」を取得する
+	var YYYY = nDate.getFullYear();
+	//「月」を取得する
+	var MM   = nDate.getMonth()+1;
+	//「日」を取得する
+	var DD   = nDate.getDate();
+	//「時」を取得する
+	var hh   = nDate.getHours();
+	//「分」を取得する
+	var mm   = nDate.getMinutes();
+
+	return YYYY+"年"+MM+"月"+DD+"日 "+hh+"時"+mm+"分 現在";
 }
 
 var latitude = 34.6888; 
@@ -73,10 +100,32 @@ const generateWeatherIcon = weatherCode => {
     return `<span class="wxIcon" title="${iconText.text}">${iconText.emoji}</span>`;
 };
 
-// 水門の開き具合表示更新
-function setGateOpen(gateOpen){
-	gateOpen.innerText(gateOpen);
-	if(gateOpen == 0){
-		
+// 水深表示更新
+function setWaterLevel(arg){
+	waterLevel.innerText = arg;
+	var waterImg = "";
+	if(arg < 2){
+		waterImg = '<img class="water_img" src="water_level_00.jpg"></img>';
+	} else if(arg < 5) {
+		waterImg = '<img class="water_img" src="water_level_01.jpg"></img>';
+	} else {
+		waterImg = '<img class="water_img" src="water_level_02.jpg"></img>';
 	}
+	waterImgDiv.innerHTML = waterImg;
+
+}
+
+// 水門の開き具合表示更新
+function setGateOpen(arg){
+	gateOpen.innerText = arg;
+	var gateImg = "";
+	if(arg == 0){
+		gateImg = '<img class="gate_img" src="gate_open_00.png"></img>';
+	} else if(arg < 0.5) {
+		gateImg = '<img class="gate_img" src="gate_open_01.png"></img>';
+	} else {
+		gateImg = '<img class="gate_img" src="gate_open_02.png"></img>';
+	}
+	gateImgDiv.innerHTML = gateImg;
+
 }
