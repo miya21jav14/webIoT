@@ -35,6 +35,14 @@ function getData(){ // get microbit's internal sensor data
 	channel.send("GET SENSOR DATA");
 }
 
+function openGate(){
+	channel.send("OPEN GATE");
+}
+
+function closeGate(){
+	channel.send("CLOSE GATE");
+}
+
 function getStrNowDate(){
 	var nDate = new Date();
 	//「年」を取得する
