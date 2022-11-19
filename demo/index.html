@@ -12,17 +12,20 @@
     h3{
         width: auto;
         text-align: center;
+        font-size: 3vw;
     }
     table{
         width: 100%;
         text-align: center;
     }
     img.main{
-        width: 50%;
+        width: 40%;
     }
     .d1{
-        font-size: small;
-        
+        font-size: 1.5vw; 
+    }
+    .d2{
+        font-size: 2vw; 
     }
     .value{
         text-align: right;
@@ -31,7 +34,7 @@
         font-size: xxx-large;
     }
     .water_img{
-        width:80%;
+        width:60%;
     }
     .gate_img{
         width:40%;
@@ -62,27 +65,32 @@
 <input type="button" onclick="ledOn('weather')" value="LED ON WEATHER"></input>
 <input type="button" onclick="ledOn('error')" value="LED ON ERROR"></input>
 <input type="button" onclick="ledOn('game')" value="LED ON GAME"></input>
+
 <div id="timeStamp" class="time_stamp">2022年11月16日 16時30分 現在</div>
 <table>
     <tr width="80%"><th><img class="main" src="tachiaraiDSC02706_TP_V.jpg"</img></th></tr>
     <tr><th>
-        <table>
+        <table  class="d2">
             <tr>
-                <td rowspan="5">
+                <td rowspan="4">
                     <div id="waterImgDiv"><img class="water_img" src="water_level_00.jpg"></img></div><br/>
                     <div class="d1">現在の水位：<span id="waterLevel">0.5</span>cm</div>
                 </td>
-                <td rowspan="5">
-                    <div id="gateImgDiv"><img class="gate_img" src="gate_open_00.png"></img></div>
-                    <br/>
-                    <div class="d1">水門の開き具合：<span id="gateOpen">0.0</span>m</div>
-                </td>
-                <th>温度</th><td id="temTd" class="value">19.9℃</td>
+                
+                <th>温度</th><td id="temTd" class="value">xx.x</td><td>℃</td>
+                <th>3時間後の<br/>予想気温</th><td id="exTemTd" class="value">xx.x</td><td>℃</td>
             </tr>
-            <tr><th>湿度</th><td id="humTd" class="value">84%</td></tr>
-            <tr><th>3時間後の<br/>予想天気</th><td id="exWxTd" class="value"></td></tr>
-            <tr><th>3時間後の<br/>予想気温</th><td id="exTemTd" class="value">0%</td></tr>
-            <tr><th>3時間後の<br/>予想降水量</th><td id="exRainTd" class="value">0㎜</td></tr>
+            <tr>
+                <th>湿度</th><td id="humTd" class="value">xx</td><td>%</td>
+                <th rowspan="2">3時間後の<br/>予想天気</th><td rowspan="2"  id="exWxTd" class="value"></td>
+            </tr>
+            <tr>
+                <th>気圧</th><td id="preTd" class="value">xxx</td><td>hPa</td>
+            </tr>
+            <tr>
+                <th>日照度</th><td id="ligTd" class="value">xxx</td><td>lx</td>
+                <th>3時間後の<br/>予想降水量</th><td id="exRainTd" class="value">x</td><td>㎜</td>
+            </tr>
         </table>
     </th></tr>
 </table>

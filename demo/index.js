@@ -5,63 +5,103 @@ onload = async function(){
 	channel = await relay.subscribe("control");
 	channel.onmessage = getMessage;
 
-	//getWeatherData();
+	getData();
+	getWeatherData();
 }
 
 function getMessage(msg){ // メッセージを受信したときに起動する関数
 	var mdata = msg.data;
-
-	/**
-	var mdata = new Object();
-	mdata.temperature = "24.5";
-	mdata.humidity = "65.8";
-	mdata.waterlevel = "8.0";
-	mdata.gateopen = "0.4";
-	 */
-
-
 	console.log("mdata:",mdata);
-	
-	temTd.innerText = mdata.temperature + "℃";
-	humTd.innerText = mdata.humidity + "％";
+
+	var temperature = Math.round(mdata.temperature * 10) / 10;
+	var humidity = Math.round(mdata.humidity);
+	var pressure = Math.round(mdata.pressure);
+	var light_intensity = Math.round(mdata.light_intensity);
+
+	if(temperature < -30 || humidity < 0 
+		|| pressure < 0 || light_intensity <0
+		|| mdata.upstream_level < 0){
+		getData();
+		return;
+	}
+
+	temTd.innerText = temperature;
+	humTd.innerText = humidity;
+	preTd.innerText = pressure;
+	ligTd.innerText = light_intensity;
 	timeStamp.innerText = getStrNowDate();
 
-	setWaterLevel(mdata.waterlevel);
-	setGateOpen(mdata.gateopen);
+	setWaterLevel(mdata.upstream_level);
+	//setGateOpen(mdata.gateopen);
 	getWeatherData();
 }
 
 function getData(){ // get microbit's internal sensor data
-	channel.send("GET SENSOR DATA");
+	var sendData = makeSendBase();
+	sendData.command = "GET SENSOR DATA";
+	channel.send(sendData);
 }
 
 function openGate(){
-	channel.send("OPEN GATE");
+	var sendData = makeSendBase();
+	sendData.command = "OPEN GATE";
+	channel.send(sendData);
 }
 
 function closeGate(){
-	channel.send("CLOSE GATE");
+	var sendData = makeSendBase();
+	sendData.command = "CLOSE GATE";
+	channel.send(sendData);
 }
 
 function ledOn(mode){
 	switch(mode) {
+		case 'gate':
+			console.log('gateモードでLEDを点灯します。');
+			var sendData = makeSendBase();
+			sendData.command = "LED MODE";
+			sendData.mode = "gate";
+			channel.send(sendData);
+			break;
+		case 'heat':
+			console.log('heatモードでLEDを点灯します。');
+			var sendData = makeSendBase();
+			sendData.command = "LED MODE";
+			sendData.mode = "heat";
+			channel.send(sendData);
+			break;
 		case 'weather':
 			console.log('weatherモードでLEDを点灯します。');
-			channel.send("LED ON WEATHER");
+			var sendData = makeSendBase();
+			sendData.command = "LED MODE";
+			sendData.mode = "weather";
+			channel.send(sendData);
 			break;
 		case 'error':
 			console.log('errorモードでLEDを点灯します。');
-			channel.send("LED ON ERROR");
+			var sendData = makeSendBase();
+			sendData.command = "LED MODE";
+			sendData.mode = "error";
+			channel.send(sendData);
 			break;
 		case 'game':
 			console.log('gameモードでLEDを点灯します。');
-			channel.send("LED ON GAME");
+			var sendData = makeSendBase();
+			sendData.command = "LED MODE";
+			sendData.mode = "identify";
+			channel.send(sendData);
 			break;
 		default:
 		  console.log('LEDを点灯しません。');
 	}
+}
 
-	
+function makeSendBase(){
+	var base = new Object();
+	base.command 		= "STATUS REPORT";
+	base.destination 	= "sensor";
+	base.sender 		= "server";
+	return base;
 }
 
 function getStrNowDate(){
@@ -104,8 +144,8 @@ async function getWeatherData(){
 	}
 
 	exWxTd.innerHTML = generateWeatherIcon(hourly.weathercode[dataNo]);
-	exTemTd.innerHTML = hourly.temperature_2m[dataNo] + "℃";
-	exRainTd.innerHTML = hourly.rain[dataNo] + "㎜";
+	exTemTd.innerHTML = hourly.temperature_2m[dataNo];
+	exRainTd.innerHTML = hourly.rain[dataNo];
 
 	console.log(data);
 }
@@ -131,7 +171,7 @@ const generateWeatherIcon = weatherCode => {
 
 // 水深表示更新
 function setWaterLevel(arg){
-	waterLevel.innerText = arg;
+	waterLevel.innerText = Math.round(arg * 10) / 10;
 	var waterImg = "";
 	if(arg < 2){
 		waterImg = '<img class="water_img" src="water_level_00.jpg"></img>';
