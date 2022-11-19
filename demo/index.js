@@ -1,23 +1,23 @@
 var channel;
 onload = async function(){
 	// webSocketリレーの初期化
-	var relay = RelayServer("chirimentest", "chirimenSocket" );
-	channel = await relay.subscribe("chirimenSHT");
+	var relay = RelayServer("chirimentest", "webiotteamg2022okayama" );
+	channel = await relay.subscribe("control");
 	channel.onmessage = getMessage;
 
 	//getWeatherData();
 }
 
 function getMessage(msg){ // メッセージを受信したときに起動する関数
-	//var mdata = msg.data;
-	
-	//
+	var mdata = msg.data;
+
+	/**
 	var mdata = new Object();
 	mdata.temperature = "24.5";
 	mdata.humidity = "65.8";
 	mdata.waterlevel = "8.0";
 	mdata.gateopen = "0.4";
-	//
+	 */
 
 
 	console.log("mdata:",mdata);
@@ -41,6 +41,27 @@ function openGate(){
 
 function closeGate(){
 	channel.send("CLOSE GATE");
+}
+
+function ledOn(mode){
+	switch(mode) {
+		case 'weather':
+			console.log('weatherモードでLEDを点灯します。');
+			channel.send("LED ON WEATHER");
+			break;
+		case 'error':
+			console.log('errorモードでLEDを点灯します。');
+			channel.send("LED ON ERROR");
+			break;
+		case 'game':
+			console.log('gameモードでLEDを点灯します。');
+			channel.send("LED ON GAME");
+			break;
+		default:
+		  console.log('LEDを点灯しません。');
+	}
+
+	
 }
 
 function getStrNowDate(){
