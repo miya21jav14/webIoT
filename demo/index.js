@@ -54,6 +54,16 @@ function closeGate(){
 	channel.send(sendData);
 }
 
+function controlGate(){
+	var sendData = makeSendBase();
+	sendData.command = "TARGET LEVEL";
+	var level = document.getElementById("waterLevel").value;
+
+	console.log('レベル:'+parseFloat(level)+'で水門を調整します。');
+	sendData.level = parseFloat(level);
+	channel.send(sendData);
+}
+
 function ledOn(mode){
 	switch(mode) {
 		case 'gate':
@@ -197,4 +207,39 @@ function setGateOpen(arg){
 	}
 	gateImgDiv.innerHTML = gateImg;
 
+}
+
+function toggleHidden(){
+	if(hiddenArea.className == "display_on"){
+		hiddenArea.className = "display_off";
+	} else {
+		hiddenArea.className = "display_on";
+	}
+}
+
+function playOpenGate(){
+	if(window.confirm("水門を開きます。よろしいですか？")){
+		openGate();
+	}
+}
+
+function playCloseGate(){
+	if(window.confirm("水門を閉じます。よろしいですか？")){
+		closeGate();
+	}
+}
+
+var cnt = 0;
+
+function changeImg(){
+	cnt++;
+	if(cnt === 3){
+		cnt = 0;
+	}
+
+	var imgsrc = "water_level_0"+cnt+".jpg";
+	console.log(imgsrc);
+	var elem = document.getElementById("waterImg22");
+	console.log(elem);
+	elem.src = imgsrc;
 }

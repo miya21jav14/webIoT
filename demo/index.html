@@ -21,6 +21,10 @@
     img.main{
         width: 40%;
     }
+    a.link_none{
+        text-decoration: none;
+        color: #000000;
+    }
     .d1{
         font-size: 1.5vw; 
     }
@@ -49,23 +53,36 @@
         width: 100%;
         text-align: right;
     }
+
+    .display_on{
+        display:"";
+    }
+
+    .display_off{
+        display:none;
+    }
 </style>
 </head>
 <script type="module" src="https://chirimen.org/remote-connection/js/beta/RelayServerGlobal.js"></script>
 <script src="index.js"></script>
 <body>
-<h3 width="100%" text-align="center" id="deviceTitle">○○さんの田んぼ 東１</h3>
-
-<input type="button" onclick="getData()" value="GET SENSOR DATA"></input>
-<input type="button" onclick="getMessage()" value="GET MESSAGE"></input>
-<input type="button" onclick="openGate()" value="OPEN GATE"></input>
-<input type="button" onclick="closeGate()" value="CLOSE GATE"></input>
-<br/>
-<input type="button" onclick="ledOn('weather')" value="LED ON WEATHER"></input>
-<input type="button" onclick="ledOn('weather')" value="LED ON WEATHER"></input>
-<input type="button" onclick="ledOn('error')" value="LED ON ERROR"></input>
-<input type="button" onclick="ledOn('game')" value="LED ON GAME"></input>
-
+<h3 width="100%" text-align="center" id="deviceTitle">
+    <a href="javascript:toggleHidden()" class="link_none">○○さんの田んぼ 東１</a>
+</h3>
+<div id="hiddenArea" class="display_off">
+    <input type="button" onclick="getData()" value="GET SENSOR DATA"></input>
+    <br/>
+    <input type="button" onclick="openGate()" value="OPEN GATE"></input>
+    <input type="button" onclick="closeGate()" value="CLOSE GATE"></input>
+    <input type="button" onclick="controlGate()" value="CONTROL GATE"></input>
+    <input type="text" id="waterLevel" value="1"/>
+    <br/>
+    <input type="button" onclick="ledOn('gate')" value="LED ON GATE"></input>
+    <input type="button" onclick="ledOn('heat')" value="LED ON HEAT"></input>
+    <input type="button" onclick="ledOn('weather')" value="LED ON WEATHER"></input>
+    <input type="button" onclick="ledOn('error')" value="LED ON ERROR"></input>
+    <input type="button" onclick="ledOn('game')" value="LED ON GAME"></input>
+</div>
 <div id="timeStamp" class="time_stamp">2022年11月16日 16時30分 現在</div>
 <table>
     <tr width="80%"><th><img class="main" src="tachiaraiDSC02706_TP_V.jpg"</img></th></tr>
@@ -73,8 +90,12 @@
         <table  class="d2">
             <tr>
                 <td rowspan="4">
-                    <div id="waterImgDiv"><img class="water_img" src="water_level_00.jpg"></img></div><br/>
-                    <div class="d1">現在の水位：<span id="waterLevel">0.5</span>cm</div>
+                    <div id="waterImgDiv" onclick="changeImg()"><img id="waterImg22" class="water_img" src="water_level_00.jpg"></img></div><br/>
+                    <div class="d1">現在の水位：<span id="waterLevel">0.5</span>cm</div><br/>
+
+                    <input type="button" onclick="playOpenGate()" value="水門を開く"></input>
+                    <input type="button" onclick="playCloseGate()" value="水門を閉じる"></input>
+
                 </td>
                 
                 <th>温度</th><td id="temTd" class="value">xx.x</td><td>℃</td>
